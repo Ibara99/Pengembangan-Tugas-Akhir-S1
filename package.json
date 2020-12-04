@@ -21,14 +21,13 @@
   },
   "homepage": "https://github.com/Ibara99/Pengembangan-Tugas-Akhir-S1#readme",
   "dependencies": {
-    // "mqtt": "^1.5.0", // ini untuk koneksi mqtt
-    // yg ini untuk websocket
-    // "bl": "^1.0.0",
-    // "coap": "^0.20.0", //ini naon?
-    // "cors": "^2.7.1",
-    // "msgpack5": "^3.3.0",
-    // "node-json2html": "^1.0.0",
-    // "ws": "^7.3.1",
+    "mqtt": "^1.5.0",
+    "bl": "^1.0.0",
+    "coap": "^0.20.0",
+    "cors": "^2.7.1",
+    "msgpack5": "^3.3.0",
+    "node-json2html": "^1.0.0",
+    "ws": "^7.3.1",
     "express": "^4.17.1",
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
