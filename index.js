@@ -1,6 +1,6 @@
 // bisa kamu pisah begini; setup http, ws, dan mqtt dipisah...
-var app = require('./servers/http');
-//   wsServer = require('./servers/websockets'),
+var app = require('./servers/http'),
+  wsServer = require('./servers/websocket');
 //   resources = require('./resources/model');
 
 // sensorRoutes = require('./routes/sensors')
@@ -58,7 +58,8 @@ const port = 3000
 // });
 
 // run server
-app.listen(port, () => {
+let server = app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
   // ws start here
+  wsServer.listen(server);
 })
