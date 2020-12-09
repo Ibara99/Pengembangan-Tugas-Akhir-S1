@@ -2,6 +2,9 @@ const express = require('express')
 const app = express()
 const port = 5555 
 const wsServer = require('./servers/websocket');
+var plug = require('./simulasi/sensor');
+plug.start();
+
 app.use(express.static('public'))
 app.get('/', (req, res) => {
 	let sal = (Math.random() * 100).toFixed();

@@ -215,11 +215,63 @@
      */
     // We use an inline data source in the example, usually data would
     // be fetched from a server
+    function subscribeToWs(url, msg) {
+        var socket = new WebSocket(url);
+
+        socket.onmessage = function (event) {
+            var tmp = JSON.parse(event.data);
+            console.log(tmp)
+            if (tmp.namasensor) {
+                // document.getElementById('anu').innerHTML = JSON.stringify(tmp);
+                addDataPoint(tmp);
+                draw();
+                var lastdata = "" + data[data.length - 1];
+                lastdata = lastdata.split(".")[0];
+                document.getElementsByClassName("salinitas")[0].innerText = lastdata;
+
+                // kasi notif
+                if (lastdata > batasAtas || lastdata < batasBawah){
+                 // document.getElementsByClassName("small-box")[3].removeAttribute("hidden")
+                 document.getElementsByClassName("small-box")[0].className = "small-box bg-warning"
+                }else{
+                 // document.getElementsByClassName("small-box")[3].setAttribute("hidden", "true")
+                 document.getElementsByClassName("small-box")[0].className = "small-box bg-info"
+                }
+            }
+        };
+        socket.onerror = function (error) {
+            console.log('An error occurred while trying to connect to a Websocket!');
+            console.log(error);
+        };
+        socket.onopen = function (event) {
+            if (msg) {
+                socket.send(msg);
+            }
+        };
+    }
+
     var data        = [0,100],
-        totalPoints = 100
+        date        = ["10-09-1999", "11-09-1999"]
+        totalPoints = 100,
+        batasAtas = 75,
+        batasBawah = 30;
+
+    subscribeToWs('ws://localhost:3000');
 
     function addDataPoint(datum) {
-      data.push(datum.salinitas)
+      data.push(datum.value)
+      if (data.length >= 100) {
+        data = data.slice(1)
+      }
+      // data.push(datum.salinitas)
+    }
+    function draw() {
+      var res = []
+      for (var i = 0; i < data.length; ++i) {
+        res.push([i, data[i]])
+      }
+      interactive_plot.setData([res]);
+      interactive_plot.draw();
     }
     function getRandomData() {
       while (data.length < totalPoints) {
@@ -228,28 +280,16 @@
       if (data.length >= 100) {
         data = data.slice(1)
       }
-
-      // Do a random walk
-      // while (data.length < totalPoints) {
-
-        // var prev = data.length > 0 ? data[data.length - 1] : 50,
-        //     y    = prev + Math.random() * 10 - 5
-
-        // if (y < 0) {
-        //   y = 0
-        // } else if (y > 100) {
-        //   y = 100
-        // }
-        let y = 0;
+      // while (data.length < totalPoints){
+        // let y = 0;
         // kendala, makan banyak ram dan cpu
-        $.getJSON('http://localhost:3000/dummy', function (datum) {
-          console.log(datum);
-          addDataPoint(datum);
-          // console.log("didalem:");
-          // console.log(y);
-        })
+        // $.getJSON('http://localhost:3000/dummy', function (datum) {
+        //   console.log(datum);
+        //   addDataPoint(datum);
+        //   // console.log("didalem:");
+        //   // console.log(y);
+        // })
 
-        console.log(data);
         // data.push(y)
       // }
 
@@ -297,51 +337,6 @@
         }
       }
     )
-
-    var updateInterval = 500 //Fetch data ever x milliseconds
-    var realtime       = 'on' //If == to on then fetch data every x seconds. else stop fetching
-    var batasAtas = 75
-    var batasBawah = 30
-    function update() {
-
-      interactive_plot.setData([getRandomData(), getRandomData()])
-      var lastdata = "" + data[data.length - 1];
-      lastdata = lastdata.split(".")[0];
-      document.getElementsByClassName("salinitas")[0].innerText = lastdata;
-
-      // kasi notif
-      if (lastdata > batasAtas || lastdata < batasBawah){
-      	// document.getElementsByClassName("small-box")[3].removeAttribute("hidden")
-      	document.getElementsByClassName("small-box")[0].className = "small-box bg-warning"
-      }else{
-      	// document.getElementsByClassName("small-box")[3].setAttribute("hidden", "true")
-      	document.getElementsByClassName("small-box")[0].className = "small-box bg-info"
-      }
-      // Since the axes don't change, we don't need to call plot.setupGrid()
-      interactive_plot.draw()
-      if (realtime === 'on') {
-        setTimeout(update, updateInterval)
-      }
-    }
-
-    //INITIALIZE REALTIME DATA FETCHING
-    if (realtime === 'on') {
-      update()
-    }
-    //REALTIME TOGGLE
-    $('#realtime .btn').click(function () {
-      if ($(this).data('toggle') === 'on') {
-        realtime = 'on'
-      }
-      else {
-        realtime = 'off'
-      }
-      update()
-    })
-    /*
-     * END INTERACTIVE CHART
-     */
-
 
     /*
      * LINE CHART

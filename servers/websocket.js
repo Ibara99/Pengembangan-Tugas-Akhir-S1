@@ -16,6 +16,7 @@ var resources = {
 	}
 }
 const clients = {};
+var interval;
 
 const getUniqueID = () => {
   const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
@@ -41,8 +42,12 @@ exports.listen = (server) => {
 			console.log('received: %s', message);
 			// SaveData(message);
 			sendMessage(message);
+			delete clients[userID];
 		});
 		// kita butuh onclose untuk delete client yg udah disimpan
+		ws.on('close', function(connection) {
+			console.log(userID+' is disconnected!')
+			delete clients[userID];
+		})
 	})
-
 }

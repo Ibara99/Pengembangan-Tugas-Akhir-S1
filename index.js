@@ -1,14 +1,14 @@
 // bisa kamu pisah begini; setup http, ws, dan mqtt dipisah...
 var app = require('./servers/http'),
-  wsServer = require('./servers/websocket');
-//   resources = require('./resources/model');
-
-// sensorRoutes = require('./routes/sensors')
-
-
+  wsServer = require('./servers/websocket'),
+  simulasiSensor = require('./simulasi/sensor');
 // ini bagian Library-Harus-Pake
 // const dotenv = require('dotenv') //ini buat anu
 const port = 3000
+
+sensorRoutes = require('./routes/sensors');
+
+simulasiSensor.start(1000);  //default interval 5s;
 
 // ini bagian mqtt
 // var mqtt = require('mqtt');
