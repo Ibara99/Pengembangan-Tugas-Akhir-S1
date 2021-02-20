@@ -62,7 +62,7 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
+                <h3 class="ph">53<sup style="font-size: 20px">%</sup></h3>
 
                 <p>Nilai <i>pH</i> (Tingkat Keasaman Air)</p>
               </div>
@@ -221,7 +221,7 @@
         socket.onmessage = function (event) {
             var tmp = JSON.parse(event.data);
             console.log(tmp)
-            if (tmp.namasensor) {
+            if (tmp.namasensor=="voltage") {
                 // document.getElementById('anu').innerHTML = JSON.stringify(tmp);
                 addDataPoint(tmp);
                 draw();
@@ -235,8 +235,11 @@
                  document.getElementsByClassName("small-box")[0].className = "small-box bg-warning"
                 }else{
                  // document.getElementsByClassName("small-box")[3].setAttribute("hidden", "true")
-                 document.getElementsByClassName("small-box")[0].className = "small-box bg-info"
+                 
                 }
+            }else if (tmp.namasensor=="ph") {
+              var lastdata = tmp.value;
+              document.getElementsByClassName("ph")[0].innerText = lastdata;
             }
         };
         socket.onerror = function (error) {
