@@ -1,5 +1,5 @@
-const mqtt = require('mqtt'),
-      db = require('../model/data.js');
+const mqtt = require('mqtt');
+      db_model = require('../model/data.js');
 
 // let db = new db_model();
 
@@ -29,18 +29,14 @@ class MqttHandler {
    });
 
     // mqtt subscriptions
-    this.mqttClient.subscribe(this.root+"/#", {qos: 0});
+    this.mqttClient.subscribe(this.root, {qos: 0});
 
     // When a message arrives, console.log it
     this.mqttClient.on('message', function (topic, message) {
       console.log("received: "+message.toString());
-      let tmp = topic.split('/');
-      let value = parseInt(message);
-      console.log(tmp);
-
-      //add to dv
-      let tgl = Date.now(); //timestamp
-      let obj = new db({timestamp: tgl, tipe: tmp[tmp.length - 1], value: value})
+      
+      let tmp = Date.now(); //timestamp
+      let obj = new db_model({timestamp: tmp, tipe: topic, value: parseInt(message)})
       obj.save((err, data) => {
         if(err) {
           console.log(err);
@@ -49,6 +45,7 @@ class MqttHandler {
         console.log(data);
         return {status: "ok"}
       })
+      
     });
 
     this.mqttClient.on('close', () => {

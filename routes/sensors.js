@@ -1,15 +1,38 @@
 var express = require('express'),
   router = express.Router(),
-  path = require('path'); //agar bisa akses root directory
+  path = require('path'); 
 
 router.route('/').get(function (req, res, next) {
   res.send('Hello World!');
-  // mqttClient.sendMessage("bot", "34");
-  // next();
+  next();
 })
+router.route('/coba').get(function (req, res, next) {
+  res.sendFile(path.resolve("views/json_view.html"))
+})
+
+// ini untuk gui
+router.route('/dashboard').get(function (req, res, next) {
+  res.sendFile(path.resolve("views/linechart.html"))
+})
+router.route('/data-ph').get(function (req, res, next) {
+  res.sendFile(path.resolve("views/linechart.html"))
+})
+router.route('/data-salinitas').get(function (req, res, next) {
+  res.sendFile(path.resolve("views/linechart.html"))
+})
+router.route('/deteksi-anomali').get(function (req, res, next) {
+  res.sendFile(path.resolve("views/linechart.html"))
+})
+router.route('/backpro').get(function (req, res, next) {
+  res.sendFile(path.resolve("views/linechart.html"))
+})
+router.route('/sma').get(function (req, res, next) {
+  res.sendFile(path.resolve("views/linechart.html"))
+})
+// sampe sini
+
 router.route('/dummy').get(function (req, res, next) { 
   let sal = (Math.random() * 100).toFixed();
-  // if (sal > 50) sal = 50;
   let asam = (Math.random() * 10).toFixed();
     res.json({
       salinitas : sal,

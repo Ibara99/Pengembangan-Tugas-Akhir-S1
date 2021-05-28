@@ -17,35 +17,35 @@ let schema = new mongoose.Schema({
 	tipe : String,
 	value : Number
 })
-module.exports = mongoose.model('Iot_dummy', schema);
-
+let object = mongoose.model('Iot_dummy', schema);
+module.exports = object;
 // class db_model {
 //   constructor() {
  	 
 //   }
 
-//   addData(tipe, value) {
-// 	let tmp = Date.now(); //timestamp
-//   	let obj = new object({timestamp: tmp, tipe: tipe, value: value})
-// 	obj.save((err, data) => {
-// 		if(err) {
-// 			console.log(err);
-// 			return {status: err};
-// 		}
-// 		console.log(data);
-// 		return {status: "ok"}
-// 	})
-//   }
+ //  addData(tipe, value) {
+	// let tmp = Date.now(); //timestamp
+ //  	let obj = new object({timestamp: tmp, tipe: tipe, value: value})
+	// obj.save((err, data) => {
+	// 	if(err) {
+	// 		console.log(err);
+	// 		return {status: err};
+	// 	}
+	// 	console.log(data);
+	// 	return {status: "ok"}
+	// })
+ //  }
 //   findAll() {
-// 	  object.find({})
+// 	  Iot.find({})
 // 	     .exec((err, data) => {
 // 	    	if (err) console.log(err)
-// 	      console.log(data);
+// 	      	console.log(data);
 // 	  		return data
 // 		 })
 //   };
 //   findByTipe(tipe) {
-// 	  object.find({tipe: tipe})
+// 	  Iot.find({tipe: tipe})
 // 	     .exec((err, data) => {
 // 	    	if (err) console.log(err)
 // 	      	console.log(data);
@@ -60,3 +60,40 @@ module.exports = mongoose.model('Iot_dummy', schema);
 //   };
 // };
 // module.exports = db_model;
+
+// let db_cache = mongoose.connect(process.env.MONGO_URI, { 
+// 	useNewUrlParser: true, useUnifiedTopology: true });
+
+// let iotSchema = new mongoose.Schema({
+// 	timestamp : date,
+// 	tipe : String,
+// 	value : Number
+// })
+
+// const Iot = mongoose.model('Iot_dummy', iotSchema);
+
+// let createAndSave = function(tipe, value) {
+// 	let tmp = null;
+//   	let obj = new Iot({timestamp: tmp, tipe: tipe, value: value})
+// 	obj.save((err, data) => {
+// 		if(err) console.log(err)
+// 		console.log(data);
+// 		return {status: "ok"}
+// 	})
+// };
+
+// let findAll = function() {
+//   Iot.find({})
+//      .exec((err, data) => {
+//     	if (err) console.log(err)
+//       	console.log(data);
+//   		return data
+// 	 })
+// };
+
+// var removeById = function(personId) {
+//   Iot.findByIdAndRemove(personId, (err, data) => {
+//     if (err) console.log(err)
+//     return {status: "ok"}
+//   })    
+// };
