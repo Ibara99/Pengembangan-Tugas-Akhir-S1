@@ -17,25 +17,25 @@ let schema = new mongoose.Schema({
 	tipe : String,
 	value : Number
 })
-let object = mongoose.model('Iot_dummy', schema);
-module.exports = object;
+module.exports = mongoose.model('Iot_dummy', schema);
+
 // class db_model {
 //   constructor() {
  	 
 //   }
 
- //  addData(tipe, value) {
-	// let tmp = Date.now(); //timestamp
- //  	let obj = new object({timestamp: tmp, tipe: tipe, value: value})
-	// obj.save((err, data) => {
-	// 	if(err) {
-	// 		console.log(err);
-	// 		return {status: err};
-	// 	}
-	// 	console.log(data);
-	// 	return {status: "ok"}
-	// })
- //  }
+//   addData(tipe, value) {
+// 	let tmp = Date.now(); //timestamp
+//   	let obj = new object({timestamp: tmp, tipe: tipe, value: value})
+// 	obj.save((err, data) => {
+// 		if(err) {
+// 			console.log(err);
+// 			return {status: err};
+// 		}
+// 		console.log(data);
+// 		return {status: "ok"}
+// 	})
+//   }
 //   findAll() {
 // 	  Iot.find({})
 // 	     .exec((err, data) => {

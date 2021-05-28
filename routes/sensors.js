@@ -1,6 +1,6 @@
 var express = require('express'),
   router = express.Router(),
-  path = require('path'); 
+  path = require('path'); //agar bisa akses root directory
 
 router.route('/').get(function (req, res, next) {
   res.send('Hello World!');
@@ -33,6 +33,7 @@ router.route('/sma').get(function (req, res, next) {
 
 router.route('/dummy').get(function (req, res, next) { 
   let sal = (Math.random() * 100).toFixed();
+  // if (sal > 50) sal = 50;
   let asam = (Math.random() * 10).toFixed();
     res.json({
       salinitas : sal,
