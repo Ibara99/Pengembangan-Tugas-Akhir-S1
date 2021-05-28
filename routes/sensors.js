@@ -4,7 +4,8 @@ var express = require('express'),
 
 router.route('/').get(function (req, res, next) {
   res.send('Hello World!');
-  next();
+  // mqttClient.sendMessage("bot", "34");
+  // next();
 })
 router.route('/dummy').get(function (req, res, next) { 
   let sal = (Math.random() * 100).toFixed();
