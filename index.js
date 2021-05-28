@@ -34,8 +34,20 @@ var mqttClient = new mqttHandler(HOST, USER_ID, PASS, ROOT);
 mqttClient.connect();
 
 app.get('/logmqtt', (req, res) => {
-  mqttClient.sendMessage(ROOT+"/bot_njs", "34");
+  let val = parseInt(Math.random() *100)
+  mqttClient.sendMessage(ROOT+"/bot_njs", val.toString());
   res.send('Cek in!')
+})
+app.get('/sendData/:tipe/:value', (req, res) => {
+  // req.params: { "userId": "34", "bookId": "8989" }
+  mqttClient.sendMessage(ROOT+"/"+req.params.tipe, req.params.value);
+  res.json(req.params);
+})
+app.get('/send-data/:ph/:sal', (req, res) => {
+  // req.params: { "userId": "34", "bookId": "8989" }
+  mqttClient.sendMessage(ROOT+"/ph", req.params.ph);
+  mqttClient.sendMessage(ROOT+"/salinitas", req.params.sal);
+  res.json(req.params);
 })
 // run server
 let server = app.listen(port, () => {
