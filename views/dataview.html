@@ -554,10 +554,11 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
           console.log("cek")
           table.clear();
           // table.row.add([1,2,3]);
-          let tgl_;
+          let tgl_, sali;
           res.data.forEach((d)=>{
             tgl_ = toDateString(d.timestamp);
-            table.row.add([tgl_, (0.0125*d.sal + 11.50).to_fixed(2), d.ph]);
+            sali = 0.0125*parseInt(d.sal) + 11.50;
+            table.row.add([tgl_, sali.toFixed(2), d.ph]);
           })
           table.draw();
         }
