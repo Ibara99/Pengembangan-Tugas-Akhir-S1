@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My LineChart Project</title>
+  <title>Dashboard</title>
   <!-- adminLTE css -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <!-- d3 js -->
@@ -100,11 +102,11 @@
 
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
-              <span class="info-box-icon bg-success elevation-1" id="recent-sal-icon"><i class="fas fa-shopping-cart"></i></span>
+              <span class="info-box-icon bg-success elevation-1" id="recent-sal-icon"><i class="fas fa-thermometer-half"></i></span>
 
               <div class="info-box-content">
                 <span class="info-box-text">Salinitas air sekarang</span>
-                <span class="info-box-number" id="recent-sal-value">33 ppt</span>
+                <span class="info-box-number" id="recent-sal-value"></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -113,29 +115,29 @@
           <!-- /.col -->
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
-              <span class="info-box-icon bg-warning elevation-1" id="recent-ph-icon"><i class="fas fa-users"></i></span>
+              <span class="info-box-icon bg-warning elevation-1" id="recent-ph-icon"><i class="fas fa-thermometer-half"></i></span>
 
               <div class="info-box-content">
                 <span class="info-box-text">pH air sekarang</span>
-                <span class="info-box-number" id="recent-ph-value">8</span>
+                <span class="info-box-number" id="recent-ph-value"></span>
               </div>
               <!-- /.info-box-content -->
             </div>
             <!-- /.info-box -->
           </div>
           <!-- /.col -->
-          <div class="col-12 col-sm-6 col-md-3">
+          <!-- <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
               <span class="info-box-icon bg-info elevation-1" id="recent-ph-icon"><i class="fas fa-users"></i></span>
 
               <div class="info-box-content">
                 <span class="info-box-text">jumlah anomali sehari terakhir</span>
                 <span class="info-box-number" id="recent-ph-value">0</span>
-              </div>
+              </div> -->
               <!-- /.info-box-content -->
-            </div>
+            <!-- </div> -->
             <!-- /.info-box -->
-          </div>
+          <!-- </div> -->
           <!-- /.col -->
         </div>
         <!-- /.row -->
@@ -146,7 +148,7 @@
               <div class="card-header border-0">
                 <div class="d-flex justify-content-between">
                   <h3 class="card-title">Salinitas  </h3>
-                  <a href="./data-salinitas">View Report</a>
+                  <a href="./data">View Report</a>
                 </div>
               </div>
               <div class="card-body">
@@ -160,7 +162,7 @@
               <div class="card-header border-0">
                 <div class="d-flex justify-content-between">
                   <h3 class="card-title">pH Air  </h3>
-                  <a href="./data-ph">View Report</a>
+                  <a href="./data">View Report</a>
                 </div>
               </div>
               <div class="card-body">
@@ -192,18 +194,18 @@
 <script src="dist/js/adminlte.js"></script>
 
 <script type="text/javascript">
-  
+   
   var datajson = []
-  //init data awal;
-  const n = 100;
-  const now = new Date();
-  var i;
-  for (i = 0; i < n; i++) {
-    datajson.push({
-      "x": new Date(now.valueOf() + i*60*1000),
-      "y": parseInt(Math.random()*10)
-    });
-  }
+  // //init data awal;
+  // const n = 100;
+  // const now = new Date();
+  // var i;
+  // for (i = 0; i < n; i++) {
+  //   datajson.push({
+  //     "x": new Date(now.valueOf() + i*60*1000),
+  //     "y": parseInt(Math.random()*10)
+  //   });
+  // }
 
   // deklarasi awal;
   const h = 200,
@@ -213,6 +215,7 @@
   const svg1 = d3.select("#svg-container-salinitas")
               .append("svg")
               .attr("viewBox", "0 0 "+w+" "+h);
+  svg1.selectAll("*").remove();
   const svg2 = d3.select("#svg-container-ph")
               .append("svg")
               .attr("viewBox", "0 0 "+w+" "+h);
@@ -225,6 +228,30 @@
                     .append("div")
                     .attr("class", "tooltip")
                     .style("opacity", 0);
+
+  //deklarasi skala dan axis;
+  var scaleX1 = d3.scaleTime(), 
+      scaleY1 = d3.scaleLinear();
+
+  svg1.append("g")
+    .attr("transform", "translate(0, "+(h-pad)+")")
+    .attr("id", "axisX")
+  
+  svg1.append("g")
+    .attr("transform", "translate("+pad+", 0)")
+    .attr("id", "axisY")
+
+
+  var scaleX2 = d3.scaleTime(), 
+      scaleY2 = d3.scaleLinear();
+
+  svg2.append("g")
+    .attr("transform", "translate(0, "+(h-pad)+")")
+    .attr("id", "axisX")
+  
+  svg2.append("g")
+    .attr("transform", "translate("+pad+", 0)")
+    .attr("id", "axisY")
 
   //deklarasi fungsi draw dan update data
   function toTwoDigit(num) {
@@ -253,7 +280,7 @@
           .range([ pad, w-pad ]);
     svg2.select("#axisX").call(d3.axisBottom(scaleX2));
 
-    scaleY2.domain([0, 10])
+    scaleY2.domain([5, 20])
           .range([ h-pad, pad ]);
     svg2.select("#axisY").call(d3.axisLeft(scaleY2));
 
@@ -328,59 +355,160 @@
     nodes2.datum(datajson);
     circles2.data(datajson);
     draw();
+
   }
-
-  //deklarasi skala dan axis;
-  var scaleX1 = d3.scaleTime(), 
-      scaleY1 = d3.scaleLinear();
-
-  svg1.append("g")
-    .attr("transform", "translate(0, "+(h-pad)+")")
-    .attr("id", "axisX")
-  
-  svg1.append("g")
-    .attr("transform", "translate("+pad+", 0)")
-    .attr("id", "axisY")
-
-
-  var scaleX2 = d3.scaleTime(), 
-      scaleY2 = d3.scaleLinear();
-
-  svg2.append("g")
-    .attr("transform", "translate(0, "+(h-pad)+")")
-    .attr("id", "axisX")
-  
-  svg2.append("g")
-    .attr("transform", "translate("+pad+", 0)")
-    .attr("id", "axisY")
-
-  // deklarasi node dan garis;
+  let cuk;
+  function initData(){
+    d3.selectAll("svg").selectAll("circle").remove()
+    d3.selectAll("svg").selectAll("path").remove()
+		const req = new XMLHttpRequest();
+		req.open("GET",'https://Pengembangan-Tugas-Akhir-S1.ibaraasro.repl.co/api',true);
+		req.send();
+		req.onload = function(){
+      const json = JSON.parse(req.responseText);
+      var datajson = json.data;
+      datajson = datajson.slice(0, 200)
+      let dataph = [];
+      datajson.forEach((dataa)=>{
+        dataph.push({
+          "x": new Date(dataa.timestamp),
+          "y": dataa.ph
+        });
+      });
+      let datasal = [];
+      datajson.forEach((dataa)=>{
+        datasal.push({
+          "x": new Date(dataa.timestamp),
+          "y": 0.0125*parseInt(dataa.sal) + 11.50 
+        });
+      });
+      console.log(dataph)
+      // nodes1.datum(dataph);
+      // circles1.data(dataph);
+      // nodes2.datum(datasal);
+      // circles2.data(datasal);
+      // draw();
+      // console.log("done");
+      
+    // deklarasi node dan garis;
   var nodes1 = svg1.append("path")
-                .datum(datajson)
+                .datum(datasal)
                 .attr("fill", "none")
                 .attr("stroke", "steelblue")
                 .attr("stroke-width", 1.5)
                 .attr("class", "nodes");
 
   var circles1 = svg1.selectAll("circle")
-                 .data(datajson)
+                 .data(datasal)
                  .enter()
                  .append("circle")
 
   var nodes2 = svg2.append("path")
-                .datum(datajson)
+                .datum(dataph)
                 .attr("fill", "none")
                 .attr("stroke", "steelblue")
                 .attr("stroke-width", 1.5)
                 .attr("class", "nodes");
 
   var circles2 = svg2.selectAll("circle")
-                 .data(datajson)
+                 .data(dataph)
                  .enter()
                  .append("circle")
+
+// rescale svg1
+    scaleX1.domain(d3.extent(dataph, function(d) { return d["x"]; }))
+          .range([ pad, w-pad ]);
+    svg1.select("#axisX").call(d3.axisBottom(scaleX1));
+
+    scaleY1.domain([5, 20])
+          .range([ h-pad, pad ]);
+    svg1.select("#axisY").call(d3.axisLeft(scaleY1));
+
+    // rescale svg2
+    scaleX2.domain(d3.extent(datasal, function(d) { return d["x"]; }))
+          .range([ pad, w-pad ]);
+    svg2.select("#axisX").call(d3.axisBottom(scaleX2));
+
+    scaleY2.domain([5,10])
+          .range([ h-pad, pad ]);
+    svg2.select("#axisY").call(d3.axisLeft(scaleY2));
+
+    // redraw svg1
+    nodes1
+      .attr("d", d3.line()
+        .x(function(d) { return scaleX1(d["x"]) })
+        .y(function(d) { return scaleY1(d["y"]) })
+        );
+    circles1
+      .attr("cx", (d, i) => scaleX1(d["x"]))
+      .attr("cy", (d, i) => scaleY1(d["y"]))
+      .attr("r", 1)
+      .attr("fill", (d) => {
+        if (d["y"]>6 || d["y"]<3) return "red"
+        return "steelblue"
+      })
+      .on("mouseover", (event, d)=>{
+        tooltip1.transition()
+                .duration(200)
+                .style("opacity", 0.75);
+        tooltip1.html("<b>Date: </b> "+toDateString(d['x'])+"<br><b>Value: </b>"+d["y"])
+                .style("left", (event.pageX)+"px")
+                .style("top", (event.pageY-200)+"px");
+      })
+      .on("mouseout", function(event, d) {
+        tooltip1
+          .transition()
+          .duration(400)
+          .style("opacity", 0);
+      });
+    // redraw svg2
+    nodes2
+      .attr("d", d3.line()
+        .x(function(d) { return scaleX2(d["x"]) })
+        .y(function(d) { return scaleY2(d["y"]) })
+        );
+    circles2
+      .attr("cx", (d, i) => scaleX2(d["x"]))
+      .attr("cy", (d, i) => scaleY2(d["y"]))
+      .attr("r", 1)
+      .attr("fill", (d) => {
+        if (d["y"]>6 || d["y"]<3) return "red"
+        return "steelblue"
+      })
+      .on("mouseover", (event, d)=>{
+        tooltip2.transition()
+                .duration(200)
+                .style("opacity", 0.75);
+        tooltip2.html("<b>Date: </b> "+toDateString(d['x'])+"<br><b>Value: </b>"+d["y"])
+                .style("left", event.pageX - 665+"px")
+                .style("top", event.pageY - 200+"px");
+        console.log(event.pageY);
+      })
+      .on("mouseout", function(event, d) {
+        tooltip2
+          .transition()
+          .duration(400)
+          .style("opacity", 0);
+      });
+
+      //ini buat ganti card
+      document.getElementById("recent-sal-value").innerHTML = datasal[0]['y'];
+      /*
+      diket: 
+      sensor sal 200 - 300
+      normal 14; 13-15; mentok 10-20;
+      ditanya:
+      fungsi linearnya?
+      */
+      document.getElementById("recent-ph-value").innerHTML = dataph[0]['y'];
+    }                 
+  }
+
+  
                  
-  draw();
-  window.setInterval(updateData, 60*1000); //1000 == 1 detik
+  //draw();
+  initData();
+  window.setInterval(initData, 60*1000); //1000 == 1 detik
 </script>
 
 </body>

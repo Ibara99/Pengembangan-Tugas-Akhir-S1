@@ -14,8 +14,11 @@ router.route('/coba').get(function (req, res, next) {
 router.route('/dashboard').get(function (req, res, next) {
   res.sendFile(path.resolve("views/linechart.html"))
 })
+router.route('/data').get(function (req, res, next) {
+  res.sendFile(path.resolve("views/dataview.html"))
+})
 router.route('/data-ph').get(function (req, res, next) {
-  res.sendFile(path.resolve("views/linechart.html"))
+  res.sendFile(path.resolve("views/dataview.html"))
 })
 router.route('/data-salinitas').get(function (req, res, next) {
   res.sendFile(path.resolve("views/linechart.html"))

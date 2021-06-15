@@ -1,5 +1,7 @@
 const mqtt = require('mqtt'),
-      db = require('../model/data.js');
+      db = require('../model/dataiot.js'),
+      db_ = require('../model/data.js'),
+      db_rw = require('../model/dt.js');
 
 // let db = new db_model();
 
@@ -36,12 +38,24 @@ class MqttHandler {
       console.log("received: "+message.toString());
       
       let tmp = topic.split('/');
-      let value = parseInt(message);
+      tmp = tmp[tmp.length - 1];
+      let val1, val2, obj; //ph-salinitas
+      if (tmp == "all"){
+        let tmp2 = message.toString().split('-');
+        val1 = tmp2[0];
+        val2 = tmp2[1];
+        let tgl = Date.now(); //timestamp
+        obj = new db({timestamp: tgl, ph: val1, sal: val2})
+      }  
+      else{
+        let value = parseInt(message);
+        let tgl = Date.now(); //timestamp
+        obj = new db_({timestamp: tgl, tipe: tmp, value: value})
+      }
       console.log(tmp);
 
       //add to dv
-      let tgl = Date.now(); //timestamp
-      let obj = new db({timestamp: tgl, tipe: tmp[tmp.length - 1], value: value})
+      
       obj.save((err, data) => {
         if(err) {
           console.log(err);
