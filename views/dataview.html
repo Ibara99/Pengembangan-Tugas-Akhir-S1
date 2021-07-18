@@ -1,9 +1,3 @@
-<!-- todo
-
--> cara pake loading di adminlte
-$('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', handleLoadedEvent)
-
--->
 <!DOCTYPE html>
 <html>
 <head>
@@ -53,14 +47,17 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
 </head>
 <body class="hold-transition layout-top-nav">
 <div class="wrapper">
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+  <nav class="main-header navbar navbar-expand-md navbar-white navbar-light">
     <div class="container">
       <a href="./Dashboard" class="navbar-brand">
         <img src="../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
              style="opacity: .8">
-        <span class="brand-text font-weight-light">namaweb</span>
+        <span class="brand-text font-weight-light"><b>IoT</b>ambak</span>
       </a>
 
+      <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
       <div class="collapse navbar-collapse order-3" id="navbarCollapse">
         <!-- Left navbar links -->
@@ -108,48 +105,77 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
     <div class="content">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-md-5 col-sm-12">
-            <div class="card card-outline card-info">
-              <div class="card-body">
-                <div class="row d-flex justify-content-center">
-                  <div class="col-sm-6">
-                  <label for="tglCek">Data yang ditampilkan</label>
-                  </div>
-                  <div class="col-sm-6">
-                  <input type="date" id="tglCek">
-                  <button class="btn btn-info" id="cek">Cari</button>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div class="col-md-4 col-sm-12">
             <div class="card card-outline card-info">
               <div class="card-header border-0">
-                <h3 class="card-title">Kondisi Air Tambak</h3>
+                <h3 class="card-title">Filter Data</h3>
 
                 <div class="card-tools">
                   <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
                   </button>
-                  <!-- <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="data.html" data-source-selector="#card-refresh-content" data-load-on-init="false"><i class="fas fa-sync-alt"></i></button> -->
                 </div>
                 <!-- /.card-tools -->
               </div>
               <div class="card-body">
-                <table id="example2" class="table table-bordered table-hover">
-                  <thead>
-                  <tr>
-                    <th>waktu</th>
-                    <th>salinitas</th>
-                    <th>pH</th>
-                  </tr>
-                  </thead>
-                  <tbody id="sali-data">
-
-                  </tbody>
-                </table>
+                <!-- <div class="row d-flex justify-content-center">
+                  <div class="col-sm-6">
+                    
+                  </div>
+                  <div class="col-sm-6">
+                    <input type="date" id="tglCek">
+                    <button class="btn btn-info" id="cek">Cari</button>
+                  </div>
+                </div> -->
+                <div class="form-group">
+                  <label for="tglCek">Dari Tanggal</label>
+                  <div class="row">
+                    <div class="col-7">
+                      <input type="date" class="form-control" id="tglCek">
+                    </div>
+                    <div class="col-5">
+                      <input type="time" class="form-control" id="wktCek" value="00:00">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="tglCek">Sampai Tanggal</label>
+                  <div class="row">
+                    <div class="col-7">
+                      <input type="date" class="form-control" id="tglCek2">
+                    </div>
+                    <div class="col-5">
+                      <input type="time" class="form-control" id="wktCek2" value="00:00">
+                    </div>
+                  </div>
+                </div>
+                <button class="form-control btn btn-info" id="cek">Cari</button>
               </div>
             </div>
+            <div class="card card-outline card-success">
+              <div class="card-header">
+                <h3 class="card-title">Statistik Data</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <dl>
+                  <dt>Rata-Rata pH</dt>
+                    <dd id="rph">undefined</dd>
+                  <dt>Nilai Tertinggi pH</dt>
+                    <dd id="maxph">undefined</dd>
+                  <dt>Nilai Terendah pH</dt>
+                    <dd id="minph">undefined</dd>
+                  <dt>Rata-Rata Salinitas</dt>
+                    <dd id="rsal">undefined</dd>
+                  <dt>Nilai Tertinggi Salinitas</dt>
+                    <dd id="maxsal">undefined</dd>
+                  <dt>Nilai Terendah Salinitas</dt>
+                    <dd id="minsal">undefined</dd>
+                </dl>
+              </div>
+              <!-- /.card-body -->
+            </div>
           </div>
-          <div class="col-md-7 col-sm-12">
+          <div class="col-md-8 col-sm-12">
             <div class="row">
               <div class="col-md-12 col-sm-12">
                 <div class="card card-outline card-success">
@@ -171,7 +197,7 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
             </div>
             <div class="row">
               <div class="col-md-12 col-sm-12">
-                <div class="card card-outline card-warning">
+                <div class="card card-outline card-success">
                   <div class="card-header border-0">
                     <h3 class="card-title">Grafik pH</h3>
 
@@ -188,12 +214,114 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
               </div>
             </div>
           </div>
-
         </div>
-        
+
+        <div class="row">
+          <div class="col-sm-6">
+            <h3 class="m-0 text-dark">Anomali Air Tambak</h1>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <div class="card card-outline card-warning">
+              <div class="card-header border-0">
+                <h3 class="card-title">Berdasarkan Ambang Batas</h3>
+
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                  </button>
+                  <!-- <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="data.html" data-source-selector="#card-refresh-content" data-load-on-init="false"><i class="fas fa-sync-alt"></i></button> -->
+                </div>
+                <!-- /.card-tools -->
+                <div class="card-body">
+                  <table id="anomali1" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                      <th>waktu</th>
+                      <th>salinitas</th>
+                      <th>pH</th>
+                      <th>Status Anomali</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="card card-outline card-warning">
+              <div class="card-header border-0">
+                <h3 class="card-title">Berdasarkan K-Means</h3>
+
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                  </button>
+                  <!-- <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="data.html" data-source-selector="#card-refresh-content" data-load-on-init="false"><i class="fas fa-sync-alt"></i></button> -->
+                </div>
+                <!-- /.card-tools -->
+                <div class="card-body">
+                  <table id="anomali2" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                      <th>waktu</th>
+                      <th>salinitas</th>
+                      <th>pH</th>
+                      <th>Status Anomali</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h3 class="m-0 text-dark">Rincian Data</h1>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+        <div class="row">
+          <div class="col-md-12 col-sm-12">
+            <div class="card card-outline card-info">
+              <div class="card-header border-0">
+                <h3 class="card-title">Kondisi Air Tambak</h3>
+
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                  </button>
+                  <!-- <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="data.html" data-source-selector="#card-refresh-content" data-load-on-init="false"><i class="fas fa-sync-alt"></i></button> -->
+                </div>
+                <!-- /.card-tools -->
+                <div class="card-body">
+                  <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                      <th>waktu</th>
+                      <th>salinitas</th>
+                      <th>pH</th>
+                      <th>Status Anomali
+                        <br>(berdasarkan ambang batas)</th>
+                      <th>Status Anomali
+                        <br>(berdasarkan K-Means)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    
   </div>
   <!-- Main Footer -->
   <footer class="main-footer">
@@ -230,24 +358,79 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
     return ""+toTwoDigit(d.getDate())+"-"+toTwoDigit(d.getMonth()+1)+"-"+year+", "+
               toTwoDigit(d.getHours())+":"+toTwoDigit(d.getMinutes())+":"+toTwoDigit(d.getSeconds());
   }
-
+  function toGMTDateString(d) {
+    // d adalah Date()
+    var year = d.getUTCFullYear();
+    return ""+year+"-"+toTwoDigit(d.getUTCMonth()+1)+"-"+toTwoDigit(d.getUTCDate())+"T"+
+              toTwoDigit(d.getUTCHours())+":"+toTwoDigit(d.getUTCMinutes())+":"+toTwoDigit(d.getUTCSeconds())+".000Z";
+  }
+  let sum = function(array){
+    if (array.length == 1) return array[0]["y"]
+    return array[0]["y"] + sum(array.slice(1))
+  }
+  let mean = function(array){
+    return sum(array)/array.length
+  }
+  let getMinMax = function(array){
+    let min = Number.MAX_VALUE, 
+        max = Number.MIN_VALUE;
+    array.forEach((num)=>{
+      if (num["y"] < min) min = num["y"]
+      if (num["y"] > max) max = num["y"]
+    })
+    return {"min": min, "max":max}
+  }
   function draw(datajson){
-    //datajson = datajson.slice(0, 200)
-    let dataph = [];
-    datajson.forEach((dataa)=>{
-      dataph.push({
-        "x": new Date(dataa.timestamp),
-        "y": dataa.ph
-      });
-    });
+    let tmp1, tmp2, m1, m2;
     let datasal = [];
-    datajson.forEach((dataa)=>{
-      datasal.push({
-        "x": new Date(dataa.timestamp),
-        "y": 0.0125*parseInt(dataa.sal) + 11.50 
+    let dataph = [];
+    if (datajson.length > 0){
+      datajson.forEach((dataa)=>{
+        dataph.push({
+          "x": new Date(dataa.timestamp),
+          "y": dataa.ph
+        });
       });
-    });
-    console.log(dataph)
+      
+      datajson.forEach((dataa)=>{
+        datasal.push({
+          "x": new Date(dataa.timestamp),
+          "y": 0.0125*parseInt(dataa.sal) + 13.50 
+        });
+      });
+      //untuk statistik
+      tmp1 = getMinMax(dataph)
+      tmp2 = getMinMax(datasal)    
+      m1 = mean(dataph)
+      m2 = mean(datasal)
+    }
+    else{
+      f = $("#tglCek")[0].value +" "+ $("#wktCek")[0].value;
+      t = $("#tglCek2")[0].value +" "+ $("#wktCek2")[0].value;
+      dataph.push({
+        "x": new Date(f),
+        "y": 5
+      }, {
+        "x": new Date(t),
+        "y": 5
+      })
+      datasal.push({
+        "x": new Date(f),
+        "y": 5
+      },{
+        "x": new Date(t),
+        "y": 5
+      })
+      tmp1 = {"min":undefined, "max":undefined}
+      tmp2 = tmp1
+    }
+    //append ke stat
+    $('#rph')[0].innerHTML = m1;
+    $('#rsal')[0].innerHTML = m2;
+    $('#minph')[0].innerHTML = tmp1.min;
+    $('#minsal')[0].innerHTML = tmp2.min;
+    $('#maxph')[0].innerHTML = tmp1.max;
+    $('#maxsal')[0].innerHTML = tmp2.max;
     
     // deklarasi node dan garis;
     var nodes1 = svg1.append("path")
@@ -277,7 +460,9 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
     // rescale svg1
     scaleX1.domain(d3.extent(dataph, function(d) { return d["x"]; }))
           .range([ pad, w-pad ]);
-    svg1.select("#axisX").call(d3.axisBottom(scaleX1));
+    axisX1 = d3.axisBottom(scaleX1)
+              .ticks(5);
+    svg1.select("#axisX").call(axisX1);
 
     scaleY1.domain([5, 20])
           .range([ h-pad, pad ]);
@@ -286,7 +471,9 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
     // rescale svg2
     scaleX2.domain(d3.extent(datasal, function(d) { return d["x"]; }))
           .range([ pad, w-pad ]);
-    svg2.select("#axisX").call(d3.axisBottom(scaleX2));
+    axisX2 = d3.axisBottom(scaleX2)
+              .ticks(5);
+    svg2.select("#axisX").call(axisX2);
 
     scaleY2.domain([5, 10])
           .range([ h-pad, pad ]);
@@ -356,14 +543,24 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
   // deklarasi awal;
   const h = 300,
         w = 500,
-        pad = 30;
+        pad = 50;
 
   const svg1 = d3.select("#svg-container-salinitas")
               .append("svg")
               .attr("viewBox", "0 0 "+w+" "+h);
+  svg1.selectAll("*").remove();
+
+  svg1.append("text").text("Salinitas Air Tambak").attr("transform", "translate("+(w/2-pad*1.5)+","+(pad-20)+")")
+  svg1.append("text").text("Waktu (jam)").attr("transform", "translate("+(w/2-pad)+","+(h-pad+35)+")")
+  svg1.append("text").text("Salinitas (ppt)").attr("transform", "translate("+(pad-30)+","+(h/2+pad)+")rotate(-90)")
+
   const svg2 = d3.select("#svg-container-ph")
               .append("svg")
               .attr("viewBox", "0 0 "+w+" "+h);
+
+  svg2.append("text").text("pH Air Tambak").attr("transform", "translate("+(w/2-pad)+","+(pad-20)+")")
+  svg2.append("text").text("Waktu (jam)").attr("transform", "translate("+(w/2-pad)+","+(h-pad+35)+")")
+  svg2.append("text").text("pH Air").attr("transform", "translate("+(pad-30)+","+(h/2+30)+")rotate(-90)")
   
   const tooltip1 = d3.select("#svg-container-salinitas")
                     .append("div")
@@ -403,27 +600,70 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
   let table = $('#example2').DataTable({
     // "paging": false,
     "lengthChange": false,
-    "searching": false,
-    "ordering": false,
+    // "searching": false,
+    "ordering": true,
     "info": true,
-    "autoWidth": true,
+    "autoWidth": false,
     "responsive": true,
-  });;
+  });
+  let tableAnomali1 = $('#anomali1').DataTable({
+    // "paging": false,
+    "lengthChange": false,
+    // "searching": false,
+    "ordering": true,
+    "info": true,
+    "autoWidth": false,
+    "responsive": true,
+  }),
+  tableAnomali2 = $('#anomali2').DataTable({
+    // "paging": false,
+    "lengthChange": false,
+    // "searching": false,
+    "ordering": true,
+    "info": true,
+    "autoWidth": false,
+    "responsive": true,
+  });
   function drawTable(datajson) {
     table.clear();
-    let tgl_, sali;
+    tableAnomali1.clear();
+    tableAnomali2.clear();
+    let tgl_, sali, lbl;
     datajson.forEach((d)=>{
       tgl_ = toDateString(d.timestamp);
-      sali = 0.0125*parseInt(d.sal) + 11.50;
-      table.row.add([tgl_, sali.toFixed(2), d.ph]);
+      sali = 0.0125*parseInt(d.sal) + 13.50;
+      if (d.ph < 6 || d.ph > 9 || sali < 14 || sali > 20)
+        lbl = "anomali"
+      else 
+        lbl = "normal"
+      table.row.add([tgl_, sali.toFixed(2), d.ph, lbl, d.status]);
+      if (lbl == "anomali")
+        tableAnomali1.row.add([tgl_, sali.toFixed(2), d.ph, lbl]);
+      if (d.status == "anomali")
+        tableAnomali2.row.add([tgl_, sali.toFixed(2), d.ph, d.status]);
     })
     table.draw();
+    tableAnomali1.draw();
+    tableAnomali2.draw();
   }
-
+  //anu
+  to_ = new Date()
+  anu = to_.getFullYear()+"-"+toTwoDigit(to_.getMonth()+1)+"-"+toTwoDigit(to_.getDate());
+  $("#tglCek2")[0].value = anu
+  anu = toTwoDigit(to_.getHours())+":"+toTwoDigit(to_.getMinutes())
+  $("#wktCek2")[0].value = anu;
+  from_ = new Date(to_.getTime() - 3*60*60*1000)
+  anu = from_.getFullYear()+"-"+toTwoDigit(from_.getMonth()+1)+"-"+toTwoDigit(from_.getDate());
+  $("#tglCek")[0].value = anu
+  anu = toTwoDigit(from_.getHours())+":"+toTwoDigit(from_.getMinutes())
+  $("#wktCek")[0].value = anu
+  to_ = toGMTDateString(to_);
+  from_ = toGMTDateString(from_);
   // document ready
   $(function () {
+
     // json awal
-    $.getJSON("https://pengembangan-tugas-akhir-s1.ibaraasro.repl.co/api?limit=300", function(res, status){
+    $.getJSON("https://pengembangan-tugas-akhir-s1.ibaraasro.repl.co/api?from="+from_+"&to="+to_, function(res, status){
       // secara basic ini untuk load table
       drawTable(res.data);
 
@@ -432,12 +672,20 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
     })
     // ini untuk pindah hari
     $("#cek").click(function(){
-      let t = document.getElementById("tglCek").value;
-      let tmp = t.split("-")
-      let tgl = toTwoDigit(parseInt(tmp[2])-1);
-      let f = tmp[0] + "-" + tmp[1] + "-" + tgl
-      f = f + " 17:00:00";
-      t = t + " 17:00:00"
+      f = $("#tglCek")[0].value +" "+ $("#wktCek")[0].value;
+      t = $("#tglCek2")[0].value +" "+ $("#wktCek2")[0].value;
+      
+      $(document).Toasts('create', {
+        icon: 'fas fa-sync fa-spin fa-lg',
+        title: 'Memuat Data',
+        position: 'topLeft',
+        autohide: true,
+        delay: 2000,
+        body: 'Memuat data dari tanggal '+f+' hingga '+t
+      })
+
+      f = toGMTDateString(new Date(f));
+      t = toGMTDateString(new Date(t));
       $.ajax({
         url: "https://Pengembangan-Tugas-Akhir-S1.ibaraasro.repl.co/api?from="+f+"&to="+t,
         success: function(res){
@@ -446,6 +694,25 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
           console.log("cek")
           drawTable(res.data);
           draw(res.data);
+
+          $(document).Toasts('create', {
+            icon: 'fas fa-check fa-lg',
+            class: 'bg-success',
+            title: 'Data berhasil dimuat',
+            position: 'topLeft',
+            autohide: true,
+            delay: 1000,
+          })
+        },
+        error: function(){
+          $(document).Toasts('create', {
+            icon: 'fas fa-times fa-lg',
+            class: 'bg-warning',
+            title: 'Data gagal dimuat',
+            position: 'topLeft',
+            autohide: true,
+            delay: 1000,
+          })
         }
       })
     })

@@ -8,6 +8,7 @@ let db_cache = mongoose.connect("mongodb+srv://ibara1010:admin123@cluster0.4gh6a
 let schema = new mongoose.Schema({
 	timestamp : Date,
 	ph : Number,
-	sal : Number
+	sal : Number,
+  status : {type: String, default: "unidentified"}
 })
 module.exports = mongoose.model('Iot__', schema);

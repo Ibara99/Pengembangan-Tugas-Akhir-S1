@@ -2,14 +2,21 @@ var express = require('express'),
 	sensorRoutes = require('./../routes/sensors'),
 	cors = require('cors'),
 	path = require('path');
+	session = require('express-session'),
 	bodyParser = require('body-parser');
 
 var app = express();
 
+app.use(session({
+  secret: ['keyboard cat'],
+  resave: false,
+  saveUninitialized: true
+}))
+
+
 app.use(express.static(path.resolve('public')))
 
 app.use(cors());
-app.use('/', sensorRoutes);
 
 // logging using middleware
 app.use((req, res, next) => {
