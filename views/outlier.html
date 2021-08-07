@@ -81,6 +81,76 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
     <!-- /.content-header -->
     <div class="content">
       <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h3 class="m-0 text-dark">Anomali Air Tambak</h1>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <div class="card card-outline card-warning">
+              <div class="card-header border-0">
+                <h3 class="card-title">Berdasarkan Ambang Batas</h3>
+
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                  </button>
+                  <!-- <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="data.html" data-source-selector="#card-refresh-content" data-load-on-init="false"><i class="fas fa-sync-alt"></i></button> -->
+                </div>
+                <!-- /.card-tools -->
+                <div class="card-body">
+                  <table id="anomali1" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                      <th>waktu</th>
+                      <th>salinitas</th>
+                      <th>pH</th>
+                      <th>Status Anomali</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="card card-outline card-warning">
+              <div class="card-header border-0">
+                <h3 class="card-title">Berdasarkan K-Means</h3>
+
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                  </button>
+                  <!-- <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="data.html" data-source-selector="#card-refresh-content" data-load-on-init="false"><i class="fas fa-sync-alt"></i></button> -->
+                </div>
+                <!-- /.card-tools -->
+                <div class="card-body">
+                  <table id="anomali2" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                      <th>waktu</th>
+                      <th>salinitas</th>
+                      <th>pH</th>
+                      <th>Status Anomali</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h3 class="m-0 text-dark">Cek Anomali Tambak</h1>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
         <div class="row">
           <div class="col-md-4 col-sm-12">
             <div class="card card-outline card-primary">
@@ -198,6 +268,8 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
                 <dl>
                   <dt>Nilai threshold</dt>
                     <dd id="threshold">undefined</dd>
+                  <dt>Nilai silhouette coefficient</dt>
+                    <dd id="silhouette">undefined</dd>
                 </dl>
               </div>
             </div>
@@ -232,7 +304,6 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
             </div>
           </div>
         </div>
-        
       </div>
     </div>
   </div>
@@ -266,7 +337,7 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
   // deklarasi awal;
   const h = 300,
         w = 500,
-        pad = 70;
+        pad = 50;
 
   const svg1 = d3.select("#svg-container-elbow")
               .append("svg")
@@ -274,7 +345,7 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
 
   // svg1.append("text").text("Cost K-Means").attr("transform", "translate("+(w/2-pad)+","+(pad-20)+")")
   svg1.append("text").text("Jumlah Cluster (k)").attr("transform", "translate("+(w/2-pad)+","+(h-pad+35)+")")
-  svg1.append("text").text("Total Kuadrat Eror (SSE)").attr("transform", "translate("+(pad-60)+","+(h/2+pad)+")rotate(-90)")
+  svg1.append("text").text("Total Kuadrat Eror (SSE)").attr("transform", "translate("+(pad-30)+","+(h/2+pad)+")rotate(-90)")
 
   const svg2 = d3.select("#svg-container-plot")
               .append("svg")
@@ -320,9 +391,11 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
   function drawElbow(datajson){
     d3.selectAll("svg").selectAll("circle").remove()
     d3.selectAll("svg").selectAll("path").remove()
+
     let costArray = datajson.cost,
         dataset = [],
         i = 2;
+    console.log(datajson.cost)
     costArray.forEach((d)=>{
       dataset.push({
         "x": i,
@@ -335,9 +408,8 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
     dataArray.forEach((d)=>{
       dataset2.push({
         "x": d.ph,
-        "y": 0.0125*parseInt(d.sal) + 13.50 
+        "y": d.sal
       });
-      i++;
     });
     console.log(dataset2)
 
@@ -401,8 +473,8 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
         .y(function(d) { return scaleY1(d["y"]) })
       )
     circles1
-      .attr("cx", (d, i) => scaleX1(d["x"]))
-      .attr("cy", (d, i) => scaleY1(d["y"]))
+      .attr("cx", (d, i) => scaleX2(d["x"]))
+      .attr("cy", (d, i) => scaleY2(d["y"]))
       .attr("r", 1)
       .attr("fill", "steelblue")
       .on("mouseover", (event, d)=>{
@@ -424,6 +496,26 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
       .attr("cx", (d, i) => scaleX2(d["x"]))
       .attr("cy", (d, i) => scaleY2(d["y"]))
       .attr("r", 1)
+      .attr("fill", "steelblue")
+      .on("mouseover", (event, d)=>{
+        tooltip2.transition()
+                .duration(200)
+                .style("opacity", 0.75);
+        tooltip2.html("<b>pH: </b> "+d['x']+"<br><b>Salinitas: </b>"+d["y"])
+                .style("left", event.pageX - 665+"px")
+                .style("top", event.pageY - 200+"px");
+      })
+      .on("mouseout", function(event, d) {
+        tooltip2
+          .transition()
+          .duration(400)
+          .style("opacity", 0);
+      });
+
+    circles2
+      .attr("cx", (d, i) => scaleX2(d["x"]))
+      .attr("cy", (d, i) => scaleY2(d["y"]))
+      .attr("r", 3)
       .attr("fill", "steelblue")
       .on("mouseover", (event, d)=>{
         tooltip2.transition()
@@ -464,9 +556,9 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
     // table2.clear();
     let tgl_, sali;
     datajson.result.forEach((d)=>{
-      tgl_ = toDateString(d.timestamp);
-      sali = 0.0125*parseInt(d.sal) + 13.50;
-      table.row.add([tgl_, sali.toFixed(2), d.ph.toFixed(2), d.distance.toFixed(2), d.status]);
+      tgl_ = toDateString(d[0]);
+      sali = 0.0125*parseInt(d[1]) + 11.50;
+      table.row.add([tgl_, sali.toFixed(2), d[2].toFixed(2), d[3].toFixed(2), d[4]]);
     })
     // $.each(datajson.centroid, (key, value)=>{
     //   table2.row.add([parseInt(key)+1, value[0].toFixed(2), value[1].toFixed(2)]);
@@ -483,15 +575,49 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
     "autoWidth": false,
     "responsive": true,
   });
-  // let table2 = $('#example1').DataTable({
-  //   // "paging": false,
-  //   "lengthChange": false,
-  //   "searching": false,
-  //   "ordering": false,
-  //   "info": true,
-  //   "autoWidth": false,
-  //   "responsive": true,
-  // });
+  let tableAnomali1 = $('#anomali1').DataTable({
+    // "paging": false,
+    "lengthChange": false,
+    // "searching": false,
+    "ordering": true,
+    "info": true,
+    "autoWidth": false,
+    "responsive": true,
+  }),
+  tableAnomali2 = $('#anomali2').DataTable({
+    // "paging": false,
+    "lengthChange": false,
+    // "searching": false,
+    "ordering": true,
+    "info": true,
+    "autoWidth": false,
+    "responsive": true,
+  });
+  function init_tabel(res) {
+    // $.getJSON("https://pengembangan-tugas-akhir-s1.ibaraasro.repl.co/api", function(res, status){
+      // secara basic ini untuk load table
+      datajson = res.data
+      tableAnomali1.clear();
+      tableAnomali2.clear();
+      let tgl_, sali, lbl;
+      datajson.forEach((d)=>{
+        tgl_ = toDateString(d.timestamp);
+        sali = d.sal;
+        if (d.ph < 6 || d.ph > 9 || sali < 14 || sali > 20)
+          lbl = "anomali"
+        else 
+          lbl = "normal"
+        
+        if (lbl == "anomali")
+          tableAnomali1.row.add([tgl_, sali.toFixed(2), d.ph, lbl]);
+        if (d.status == "outlier")
+          tableAnomali2.row.add([tgl_, sali.toFixed(2), d.ph, "anomali"]);
+      })
+      tableAnomali1.draw();
+      tableAnomali2.draw();
+    // })
+  }
+  // init_tabel()
 
   //anu
   to_ = new Date()
@@ -506,7 +632,8 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
   $("#wktCek")[0].value = anu
   to_ = toGMTDateString(to_);
   from_ = toGMTDateString(from_);
-
+  
+  
 
   $("#cek").click(()=>{
     f = $("#tglCek")[0].value +" "+ $("#wktCek")[0].value;
@@ -525,10 +652,12 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
     t = toGMTDateString(new Date(t));
     $.ajax({
       url: "https://pengembangan-tugas-akhir-s1.ibaraasro.repl.co/api/elbow",
+      // url: "http://localhost:5000/api/elbow",
       method: "GET", 
-      data: {"from": f, "to": t},
+      data: {"from": f, "to":t},
       success: function(d){
         drawElbow(d);
+        init_tabel(d);
         $(document).Toasts('create', {
           icon: 'fas fa-check fa-lg',
           class: 'bg-success',
@@ -567,11 +696,11 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
     t = toGMTDateString(new Date(t));
     let k = $("#k")[0].value;
     $.ajax({
-      url: "https://pengembangan-tugas-akhir-s1.ibaraasro.repl.co/api/detekAnomali",
+      url: "https://pengembangan-tugas-akhir-s1.ibaraasro.repl.co/api/detekAnomali?to="+t+"&from="+f,
+      // url: "http://localhost:5000/api/deteksioutlier",
       method: "GET", 
-      data: {"from": f, "to": t},
+      data: {"url":"http://localhost:5000/api/getone", "k": k},
       success: function(d){
-        console.log(d)
         drawTable(d);
         $(document).Toasts('create', {
           icon: 'fas fa-check fa-lg',

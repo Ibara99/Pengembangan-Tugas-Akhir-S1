@@ -91,7 +91,10 @@ let mean = function(array){
 }
 // $std = sqrt($totdiffer/(sizeof($data)-1));
 let std = function(array){
-  return (sum(array)/(array.length-1))**0.5
+  summed = 0;
+  x_ = mean(array);
+  array.forEach((x,i) => summed = summed + (x_-x)**2 )
+  return (summed/(array.length-1))**0.5
 }
 
 let countOut = function(o){
@@ -109,7 +112,7 @@ let countOut = function(o){
 
 let convertSal = function(x){
     try{
-        return 0.0125*x + 11.50
+        return 0.0125*x + 13.50
     }
     catch{
         return x
@@ -120,7 +123,7 @@ let euclideanDistance = (x,y)=>{
     //"Untuk menghitung jarak antara x dengan y\nx,y: list 1D"
     let tot = 0
     y.forEach((d, i) => {
-      tot += (x[i+1]-y[i])**2
+      tot += (x[i]-y[i])**2
     })
     return tot**0.5
 }
@@ -141,6 +144,7 @@ let kmeans = (data, k)=>{
     new_centroid.push([data[c][1], data[c][2]])
     centroid.push([0,0])
   }
+  
   while(! ArrayEquals(new_centroid, centroid)){
     centroid = new_centroid
     cluster = [] //init cluster
@@ -149,8 +153,8 @@ let kmeans = (data, k)=>{
     }
     
     data.forEach((row)=>{
-      for (var c = 0; c < centroid.length; c++) {  
-        dist = euclideanDistance(row, centroid[c])
+      for (var c = 0; c < centroid.length; c++) { 
+        dist = euclideanDistance(row.slice(1), centroid[c])
         if (c == 0 || dist < last) { //untuk nilai awal || ambil yg lebih kecil
           ind = c;
           last = dist;
@@ -188,7 +192,7 @@ let cost = (res_cl)=>{
   SSE = 0;
   res_cl.cluster.forEach((data, c)=>{
     data.forEach((row)=>{
-      tmp = euclideanDistance(row, res_cl.centroid[c])
+      tmp = euclideanDistance(row.slice(1), res_cl.centroid[c])
       SSE += tmp **2
     })
   })
@@ -199,7 +203,7 @@ let deteksiOutlier = (res_cl)=>{
   let data_ = []
   res_cl.cluster.forEach((data, c)=>{
     data.forEach((row)=>{
-      tmp = euclideanDistance(row, res_cl.centroid[c])
+      tmp = euclideanDistance(row.slice(1), res_cl.centroid[c])
       dist_all.push(tmp)
       data_.push({
         "timestamp": row[0],
@@ -227,6 +231,34 @@ let deteksiOutlier = (res_cl)=>{
     "data": data_
   }
 }
+let silhuette = (res_cl)=>{
+  score_all = []
+  res_cl.cluster.forEach((c1, ic1)=>{
+    c1.forEach((data1, i) => {
+      d_all = [];
+      c1.forEach((data2, j) => {
+        if (i != j){
+          d_all.push(euclideanDistance(data1.slice(1), data2.slice(1)))
+        }
+      })
+      a = mean(d_all);
+      b_all = []
+      res_cl.cluster.forEach((c2, ic2)=>{
+        if (ic1 != ic2){
+          d_all = []
+          c2.forEach((data2, j)=>{
+            d_all.push(euclideanDistance(data1.slice(1), data2.slice(1)))
+          })
+          b_all.push(mean(d_all))
+        }
+      })
+      b = Math.min.apply(null, b_all) //karena array, pake .apply(null, var)
+      score = (b-a)/Math.max(a,b)
+      score_all.push(score)
+    })
+  })
+  return mean(score_all)
+}
 
 // init objek untuk eksport
 let AnomalyHandler = {};
@@ -234,6 +266,8 @@ AnomalyHandler.euclideanDistance = euclideanDistance;
 AnomalyHandler.kmeans = kmeans;
 AnomalyHandler.cost = cost;
 AnomalyHandler.deteksiOutlier = deteksiOutlier;
+AnomalyHandler.convertSal = convertSal;
+AnomalyHandler.silCoef = silhuette;
 
 //export
 module.exports = AnomalyHandler

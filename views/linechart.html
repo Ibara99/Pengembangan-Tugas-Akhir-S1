@@ -301,7 +301,7 @@
           .range([ pad, w-pad ]);
     svg2.select("#axisX").call(d3.axisBottom(scaleX2));
 
-    scaleY2.domain([5, 20])
+    scaleY2.domain([0, 20])
           .range([ h-pad, pad ]);
     svg2.select("#axisY").call(d3.axisLeft(scaleY2));
 
@@ -391,23 +391,23 @@
       datajson.forEach((dataa)=>{
         datasal.push({
           "x": new Date(dataa.timestamp),
-          "y": 0.0125*parseInt(dataa.sal) + 11.50 
+          "y": dataa.sal
         });
       });
       if (datajson.length == 0){
         dataph.push({
           "x": new Date(datenow),
-          "y": -10
+          "y": 0
         }, {
           "x": new Date(dateback),
-          "y": -10
+          "y": 0
         })
         datasal.push({
           "x": new Date(datenow),
-          "y": -10
+          "y": 0
         },{
           "x": new Date(dateback),
-          "y": -10
+          "y": 0
         })
       }
       console.log(datajson)
@@ -450,7 +450,7 @@
               .ticks(3);
     svg1.select("#axisX").call(axisX1);
 
-    scaleY1.domain([5, 20])
+    scaleY1.domain([0, 20])
           .range([ h-pad, pad ]);
     svg1.select("#axisY").call(d3.axisLeft(scaleY1));
 
@@ -461,7 +461,7 @@
               .ticks(3);
     svg2.select("#axisX").call(axisX2);
 
-    scaleY2.domain([5, 10])
+    scaleY2.domain([0, 10])
           .range([ h-pad, pad ]);
     svg2.select("#axisY").call(d3.axisLeft(scaleY2));
 

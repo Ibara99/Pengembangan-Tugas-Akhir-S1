@@ -216,71 +216,6 @@
           </div>
         </div>
 
-        <div class="row">
-          <div class="col-sm-6">
-            <h3 class="m-0 text-dark">Anomali Air Tambak</h1>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-        <div class="row">
-          <div class="col-md-6 col-sm-12">
-            <div class="card card-outline card-warning">
-              <div class="card-header border-0">
-                <h3 class="card-title">Berdasarkan Ambang Batas</h3>
-
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                  </button>
-                  <!-- <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="data.html" data-source-selector="#card-refresh-content" data-load-on-init="false"><i class="fas fa-sync-alt"></i></button> -->
-                </div>
-                <!-- /.card-tools -->
-                <div class="card-body">
-                  <table id="anomali1" class="table table-bordered table-hover">
-                    <thead>
-                    <tr>
-                      <th>waktu</th>
-                      <th>salinitas</th>
-                      <th>pH</th>
-                      <th>Status Anomali</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-sm-12">
-            <div class="card card-outline card-warning">
-              <div class="card-header border-0">
-                <h3 class="card-title">Berdasarkan K-Means</h3>
-
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                  </button>
-                  <!-- <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="data.html" data-source-selector="#card-refresh-content" data-load-on-init="false"><i class="fas fa-sync-alt"></i></button> -->
-                </div>
-                <!-- /.card-tools -->
-                <div class="card-body">
-                  <table id="anomali2" class="table table-bordered table-hover">
-                    <thead>
-                    <tr>
-                      <th>waktu</th>
-                      <th>salinitas</th>
-                      <th>pH</th>
-                      <th>Status Anomali</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <div class="row mb-2">
           <div class="col-sm-6">
             <h3 class="m-0 text-dark">Rincian Data</h1>
@@ -305,10 +240,10 @@
                       <th>waktu</th>
                       <th>salinitas</th>
                       <th>pH</th>
-                      <th>Status Anomali
+                      <!-- <th>Status Anomali
                         <br>(berdasarkan ambang batas)</th>
                       <th>Status Anomali
-                        <br>(berdasarkan K-Means)</th>
+                        <br>(berdasarkan K-Means)</th> -->
                     </tr>
                     </thead>
                     <tbody>
@@ -395,7 +330,8 @@
       datajson.forEach((dataa)=>{
         datasal.push({
           "x": new Date(dataa.timestamp),
-          "y": 0.0125*parseInt(dataa.sal) + 13.50 
+          //"y": 0.0125*parseInt(dataa.sal) + 13.50 
+          "y": dataa.sal
         });
       });
       //untuk statistik
@@ -606,45 +542,17 @@
     "autoWidth": false,
     "responsive": true,
   });
-  let tableAnomali1 = $('#anomali1').DataTable({
-    // "paging": false,
-    "lengthChange": false,
-    // "searching": false,
-    "ordering": true,
-    "info": true,
-    "autoWidth": false,
-    "responsive": true,
-  }),
-  tableAnomali2 = $('#anomali2').DataTable({
-    // "paging": false,
-    "lengthChange": false,
-    // "searching": false,
-    "ordering": true,
-    "info": true,
-    "autoWidth": false,
-    "responsive": true,
-  });
+  
   function drawTable(datajson) {
     table.clear();
-    tableAnomali1.clear();
-    tableAnomali2.clear();
     let tgl_, sali, lbl;
     datajson.forEach((d)=>{
       tgl_ = toDateString(d.timestamp);
-      sali = 0.0125*parseInt(d.sal) + 13.50;
-      if (d.ph < 6 || d.ph > 9 || sali < 14 || sali > 20)
-        lbl = "anomali"
-      else 
-        lbl = "normal"
-      table.row.add([tgl_, sali.toFixed(2), d.ph, lbl, d.status]);
-      if (lbl == "anomali")
-        tableAnomali1.row.add([tgl_, sali.toFixed(2), d.ph, lbl]);
-      if (d.status == "anomali")
-        tableAnomali2.row.add([tgl_, sali.toFixed(2), d.ph, d.status]);
+      // sali = 0.0125*parseInt(d.sal) + 13.50;
+      sali = d.sal;
+      table.row.add([tgl_, sali.toFixed(2), d.ph]);
     })
     table.draw();
-    tableAnomali1.draw();
-    tableAnomali2.draw();
   }
   //anu
   to_ = new Date()
