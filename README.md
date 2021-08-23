@@ -17,6 +17,9 @@ Beberapa penjelasan direktori pada projek ini.
 ### index.js
 File main program
 
+### ./kode_arduino
+Direktori berisi file untuk dirunning pada mikrokontroller. Back-up jika sewaktu-waktu butuh/dipertanyakan.
+
 ### ./model
 direktori berisi model database
 

@@ -51,6 +51,7 @@ router.route('/elbow').get(function (req, res, next) {
   //harusnya get param di sini untuk get data
   let f = req.query.from;
   let t = req.query.to;
+  let batas_k = req.query.k;
   
   //get data
   if (f && t){
@@ -66,13 +67,28 @@ router.route('/elbow').get(function (req, res, next) {
         // data tipenya array[x] = object
         // transformasi data jadi array[array]
         data_trans = []
+        data_out = []
         data.forEach((d, c)=>{
           data_trans.push([data[c].timestamp, data[c].ph, anomali.convertSal(data[c].sal)])
+          row = {
+            "_id": d._id,
+            "__v": d.__v,
+            "timestamp": d.timestamp,
+            "ph": d.ph,
+            "sal": anomali.convertSal(d.sal),
+            "status": d.status
+          };
+          data_out.push(row);
         })
+        if(!batas_k){
+          batas_k = data_trans.length - 1;
+        }
+
         let cost_all = [],
             cl_result, c;
-        if (data_trans.length>1){
-          for (var k=2; k<10; k++) {
+        if (data_trans.length>2){
+          for (var k=2; k<batas_k; k++) {
+            if (k%25 == 0) console.log(k)
             cl_result = anomali.kmeans(data_trans, k);
             c = anomali.cost(cl_result);
             cost_all.push(c)
@@ -82,7 +98,7 @@ router.route('/elbow').get(function (req, res, next) {
         }
         res.json({
           "cost": cost_all,
-          "data": data
+          "data": data_out
         })
       })
   }

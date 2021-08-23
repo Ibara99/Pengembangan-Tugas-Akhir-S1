@@ -1,33 +1,31 @@
-<!-- todo
-
--> cara pake loading di adminlte
-$('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', handleLoadedEvent)
-
--->
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Deteksi Outlier</title>
-  <!-- adminLTE css -->
-  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
-  <!-- Google Font: Source Sans Pro -->
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
-  <!-- DataTables -->
-  <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <!-- d3 js -->
-  <script src="../../plugins/d3/d3.min.js"></script>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Deteksi Outlier</title>
+	<!-- adminLTE css -->
+	<link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+	<!-- Google Font: Source Sans Pro -->
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+	<!-- DataTables -->
+	<link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+	<!-- d3 js -->
+	<script src="../../plugins/d3/d3.min.js">
+
+	</script>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 </head>
+
 <body class="hold-transition layout-top-nav">
-<div class="wrapper">
-  <nav class="main-header navbar navbar-expand-md navbar-white navbar-light">
-    <div class="container">
-      <a href="./Dashboard" class="navbar-brand">
-        <img src="../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+	<div class="wrapper">
+		<nav class="main-header navbar navbar-expand-md navbar-white navbar-light">
+			<div class="container">
+				<a href="./Dashboard" class="navbar-brand">
+					<img src="../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
              style="opacity: .8">
         <span class="brand-text font-weight-light"><b>IoT</b>ambak</span>
       </a>
@@ -81,74 +79,10 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
     <!-- /.content-header -->
     <div class="content">
       <div class="container-fluid">
+        
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h3 class="m-0 text-dark">Anomali Air Tambak</h1>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-        <div class="row">
-          <div class="col-md-6 col-sm-12">
-            <div class="card card-outline card-warning">
-              <div class="card-header border-0">
-                <h3 class="card-title">Berdasarkan Ambang Batas</h3>
-
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                  </button>
-                  <!-- <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="data.html" data-source-selector="#card-refresh-content" data-load-on-init="false"><i class="fas fa-sync-alt"></i></button> -->
-                </div>
-                <!-- /.card-tools -->
-                <div class="card-body">
-                  <table id="anomali1" class="table table-bordered table-hover">
-                    <thead>
-                    <tr>
-                      <th>waktu</th>
-                      <th>salinitas</th>
-                      <th>pH</th>
-                      <th>Status Anomali</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-sm-12">
-            <div class="card card-outline card-warning">
-              <div class="card-header border-0">
-                <h3 class="card-title">Berdasarkan K-Means</h3>
-
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                  </button>
-                  <!-- <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="data.html" data-source-selector="#card-refresh-content" data-load-on-init="false"><i class="fas fa-sync-alt"></i></button> -->
-                </div>
-                <!-- /.card-tools -->
-                <div class="card-body">
-                  <table id="anomali2" class="table table-bordered table-hover">
-                    <thead>
-                    <tr>
-                      <th>waktu</th>
-                      <th>salinitas</th>
-                      <th>pH</th>
-                      <th>Status Anomali</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h3 class="m-0 text-dark">Cek Anomali Tambak</h1>
+            <h3 class="m-0 text-dark">Metode Elbow</h1>
           </div><!-- /.col -->
         </div><!-- /.row -->
         <div class="row">
@@ -229,17 +163,80 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
               </div>
             </div>
           </div> 
-          <div class="col-md-4 col-sm-12">
-            <div class="card card-outline card-primary">
+        </div>
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h3 class="m-0 text-dark">Histori Anomali Air Tambak</h1>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <div class="card card-outline card-warning">
               <div class="card-header border-0">
-                <h3 class="card-title">Deteksi Outlier</h3>
+                <h3 class="card-title">Berdasarkan Ambang Batas</h3>
 
                 <div class="card-tools">
                   <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
                   </button>
+                  <!-- <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="data.html" data-source-selector="#card-refresh-content" data-load-on-init="false"><i class="fas fa-sync-alt"></i></button> -->
                 </div>
                 <!-- /.card-tools -->
+                <div class="card-body">
+                  <table id="anomali1" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                      <th>waktu</th>
+                      <th>salinitas</th>
+                      <th>pH</th>
+                      <th>Status Anomali</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
               </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="card card-outline card-warning">
+              <div class="card-header border-0">
+                <h3 class="card-title">Berdasarkan K-Means</h3>
+
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                  </button>
+                  <!-- <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="data.html" data-source-selector="#card-refresh-content" data-load-on-init="false"><i class="fas fa-sync-alt"></i></button> -->
+                </div>
+                <!-- /.card-tools -->
+                <div class="card-body">
+                  <table id="anomali2" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                      <th>waktu</th>
+                      <th>salinitas</th>
+                      <th>pH</th>
+                      <th>Status Anomali</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h3 class="m-0 text-dark">Cek Anomali Tambak dengan Jumlah Cluster Berbeda</h1>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+        <div class="row">
+          <div class="col-md-4 col-sm-12">
+            <div class="card card-outline card-primary">
               <div class="card-body">
                 <div class="form-group">
                   <div class="row">
@@ -552,13 +549,14 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
   }
   function drawTable(datajson) {
     $("#threshold")[0].innerHTML = datajson.threshold.toFixed(2);
+    $("#silhouette")[0].innerHTML = datajson.silhouette.toFixed(2);
+    
     table.clear();
     // table2.clear();
     let tgl_, sali;
     datajson.result.forEach((d)=>{
-      tgl_ = toDateString(d[0]);
-      sali = 0.0125*parseInt(d[1]) + 11.50;
-      table.row.add([tgl_, sali.toFixed(2), d[2].toFixed(2), d[3].toFixed(2), d[4]]);
+      tgl_ = toDateString(d.timestamp);
+      table.row.add([tgl_, d.sal.toFixed(2), d.ph.toFixed(2), d.distance.toFixed(2), d.status]);
     })
     // $.each(datajson.centroid, (key, value)=>{
     //   table2.row.add([parseInt(key)+1, value[0].toFixed(2), value[1].toFixed(2)]);
@@ -644,7 +642,7 @@ $('#my-card [data-card-widget="card-refresh"]').on('loaded.lte.cardrefresh', han
       title: 'Mengolah data menggunakan metode Elbow',
       position: 'topLeft',
       autohide: true,
-      delay: 5000,
+      delay: 4*60*1000,
       body: 'Mengolah data dari tanggal '+f+' hingga '+t
     })
 

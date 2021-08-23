@@ -120,11 +120,23 @@
           <!-- /.col -->
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
-              <span class="info-box-icon bg-warning elevation-1" id="recent-ph-icon"><i class="fas fa-thermometer-half"></i></span>
+              <span class="info-box-icon bg-success elevation-1" id="recent-ph-icon"><i class="fas fa-thermometer-half"></i></span>
 
               <div class="info-box-content">
                 <span class="info-box-text">pH air sekarang</span>
                 <span class="info-box-number" id="recent-ph-value"></span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+              <span class="info-box-icon bg-warning elevation-1" id="recent-ph-icon"><i class="fas fa-exclamation-triangle "></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">Jumlah Anomali 1 hari terakhir</span>
+                <span class="info-box-number" id="recent-anomaly-value"></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -373,7 +385,6 @@
     let from_ = toGMTDateString(dateback);
 		const req = new XMLHttpRequest();
 		req.open("GET",'https://Pengembangan-Tugas-Akhir-S1.ibaraasro.repl.co/api?from='+from_+'&to='+to_, true);
-    // req.open("GET",'http://localhost:5000/api/getone',true);
 		req.send();
 		req.onload = function(){
       const json = JSON.parse(req.responseText);
@@ -533,6 +544,7 @@
       fungsi linearnya?
       */
       document.getElementById("recent-ph-value").innerHTML = dataph[0]['y'];
+      document.getElementById("recent-anomaly-value").innerHTML = 0;
     }                 
   }
 
