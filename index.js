@@ -7,7 +7,7 @@ var app = require('./servers/http'),
   express = require('express');
 
 // ini bagian Library-Harus-Pake
-const mqtt = require("mqtt");
+// const mqtt = require("mqtt");
 
 //routing
 sensorRoutes = require('./routes/sensors');
@@ -19,8 +19,9 @@ const port = 3000,
   USER_ID = process.env.USER_ID,
   PASS = process.env.PASS,
   ROOT = process.env.ROOT_TOPIC,
-  HOST = "mqtt://test.mosquitto.org:1883";
-  // HOST = "mqtt://"+process.env.BROKER_HOST +":1883";
+  // HOST = "mqtt://test.mosquitto.org:1883";
+  // HOST = "mqtt://mqtt.dioty.co:1883";
+  HOST = "mqtt://broker.emqx.io:1883";
 //console.log(HOST);
 var mqttClient = new mqttHandler(HOST, USER_ID, PASS, ROOT);
 mqttClient.connect();
@@ -30,17 +31,6 @@ app.get('/logmqtt', (req, res) => {
   mqttClient.sendMessage(ROOT+"/bot_njs", val.toString());
   res.send('Cek in!')
 })
-// app.get('/sendData/:tipe/:value', (req, res) => {
-//   // req.params: { "userId": "34", "bookId": "8989" }
-//   mqttClient.sendMessage(ROOT+"/"+req.params.tipe, req.params.value);
-//   res.json(req.params);
-// })
-// app.get('/send-data/:ph/:sal', (req, res) => {
-//   // req.params: { "userId": "34", "bookId": "8989" }
-//   mqttClient.sendMessage(ROOT+"/ph", req.params.ph);
-//   mqttClient.sendMessage(ROOT+"/salinitas", req.params.sal);
-//   res.json(req.params);
-// })
 
 //kita buat fungsi untuk dijalanin tiap sekian jam,
 //dengan asumsi, udah tau cara post ke python
@@ -61,14 +51,14 @@ let cronjobFunction = () =>{
     //get fixed timestamp; pake jam GMT
     let from_, to_;
     if (now.getUTCHours()+GMT7 == 24){
-      from_ = back.getUTCFullYear()+"-"+toTwoDigit(back.getUTCMonth())+"-"+toTwoDigit(back.getDate())+"09:00:00.000Z"
-      to_ = now.getUTCFullYear()+"-"+toTwoDigit(now.getUTCMonth())+"-"+toTwoDigit(now.getDate())+"17:00:00.000Z"
+      from_ = back.getUTCFullYear()+"-"+toTwoDigit(back.getUTCMonth())+"-"+toTwoDigit(back.getDate())+"T09:00:00.000Z"
+      to_ = now.getUTCFullYear()+"-"+toTwoDigit(now.getUTCMonth())+"-"+toTwoDigit(now.getDate())+"T17:00:00.000Z"
     }else if (now.getUTCHours()+GMT7 == 8){
-      from_ = back.getUTCFullYear()+"-"+toTwoDigit(back.getUTCMonth())+"-"+toTwoDigit(back.getDate())+"17:00:00.000Z"
-      to_ = now.getUTCFullYear()+"-"+toTwoDigit(now.getUTCMonth())+"-"+toTwoDigit(now.getDate())+"01:00:00.000Z"
+      from_ = back.getUTCFullYear()+"-"+toTwoDigit(back.getUTCMonth())+"-"+toTwoDigit(back.getDate())+"T17:00:00.000Z"
+      to_ = now.getUTCFullYear()+"-"+toTwoDigit(now.getUTCMonth())+"-"+toTwoDigit(now.getDate())+"T01:00:00.000Z"
     }else if (now.getUTCHours()+GMT7 == 16){
-      from_ = back.getUTCFullYear()+"-"+toTwoDigit(back.getUTCMonth())+"-"+toTwoDigit(back.getDate())+"01:00:00.000Z"
-      to_ = now.getUTCFullYear()+"-"+toTwoDigit(now.getUTCMonth())+"-"+toTwoDigit(now.getDate())+"09:00:00.000Z"
+      from_ = back.getUTCFullYear()+"-"+toTwoDigit(back.getUTCMonth())+"-"+toTwoDigit(back.getDate())+"T01:00:00.000Z"
+      to_ = now.getUTCFullYear()+"-"+toTwoDigit(now.getUTCMonth())+"-"+toTwoDigit(now.getDate())+"T09:00:00.000Z"
     }
     //cek di db apakah sudah dilakukan deteksi outlier
     db.find({timestamp:{$gte: from_, $lte:to_}})
@@ -76,7 +66,7 @@ let cronjobFunction = () =>{
       .sort({"timestamp": -1})
       .exec((err, data) => {
         if (err) console.log(err)
-        if(data instanceof array){
+        if(data.length > 2){
           // jika data terakhir belum diidentifikasi,
           if (data[0].status == "unidentified"){
             // maka lakukan deteksi (entah gimana cara ngirim post ke pyton)
@@ -115,13 +105,52 @@ let tes = function(data){
     "result": ano_result.data
   }
 }
-// setInterval(cronjobFunction, 60*1000)
+setInterval(cronjobFunction, 10*60*1000)
+
+//ini untuk anu wkwk
+var sampleData = function(){
+  console.log("anu");
+  let now = new Date(),
+    back = new Date(now.getTime() - 1*60*1000);
+
+  from_ = back.getUTCFullYear()+"-06-"+toTwoDigit(back.getDate())+"T"+toTwoDigit(back.getUTCHours())+":"+toTwoDigit(back.getUTCMinutes())+":00.000Z";
+  to_ = now.getUTCFullYear()+"-06-"+toTwoDigit(now.getDate())+"T"+toTwoDigit(now.getUTCHours())+":"+toTwoDigit(now.getUTCMinutes())+":00.000Z";
+  db.find({timestamp:{$gte: from_, $lte:to_}})
+      .limit(1)
+      .sort({"timestamp": -1})
+      .exec((err, data) => {
+        if (err) console.log(err)
+
+        if(data.length > 0){
+          console.log("gs");
+          //jika ada kita get oh dan sal
+          var p = data[0].ph,
+          s = data[0].sal;
+          if(now.getUTCHours() == 0){
+            s = s + 50;
+          }
+          else if (now.getUTCHours() == 8){
+            p = p - 2;
+          }
+          else if(now.getUTCHours() == 16){
+            s = s + 50;
+            p = p - 2;
+          }
+          let val = ""+p+"-"+s;
+          mqttClient.sendMessage(ROOT+"/all", val);
+          
+        }
+      })
+}
+setInterval(sampleData, 1*60*1000)
+
 
 //error handling
 app.use(function (req, res, next) {
   // res.status(404).send("Sorry can't find that!")
   res.sendFile(path.resolve("views/404.html"))
 })
+
 app.use(function (err, req, res, next) {
   console.error(err.stack)
   // res.status(500).send('Something broke!')

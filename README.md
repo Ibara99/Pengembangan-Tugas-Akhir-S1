@@ -1,6 +1,9 @@
 
 # Dokumentasi Pengembangan Tugas Akhir S1
 
+##catatan penulis
+manipulasi salinitas dimuali 03/09/21 jam 9am.  dan baru dan baru ditambah salinitasnya (menggunakan garam dapur jam 10am.
+
 ## Overview Repositori
 Sebuah Repositori untuk tracking progress tugas akhir serta sekalian untuk portofolio. Projek tugas akhir ini dilakukan bersama 2 teman saya, dengan inisial C dan F. Bersama 2 dosen pembimbing, Pak Mulaab dan Pak Dwi Kuswanto.
 

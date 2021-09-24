@@ -17,7 +17,13 @@ class MqttHandler {
   
   connect() {
     // Connect mqtt with credentials (in case of needed, otherwise we can omit 2nd param)
-    this.mqttClient = mqtt.connect(this.host, { username: this.username, password: this.password });
+    this.mqttClient = mqtt.connect(this.host, { //username: this.username, 
+    //password: this.password, 
+    clean: true,
+    connectTimeout: 4000,
+    username: 'emqx',
+    password: 'public',
+    reconnectPeriod: 1000});
 
     // Mqtt error calback
     this.mqttClient.on('error', (err) => {

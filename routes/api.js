@@ -4,11 +4,17 @@ var express = require('express'),
   anomali = require('../plugins/kmeans.js'),
   db = require('../model/dataiot.js');
   
-
+function toTwoDigit(num) {
+  if (num<10) return "0"+num;
+  return num.toString();
+}
+function toTimestamp(d) {
+  return d.getUTCFullYear()+"-"+toTwoDigit(d.getUTCMonth())+"-"+toTwoDigit(d.getUTCDate())+"T"+toTwoDigit(d.getUTCHours())+":"+toTwoDigit(d.getUTCMinutes())+":"+toTwoDigit(d.getUTCSeconds())+".000Z";
+}
 // let db = new db_model();
 
 router.route('/').get(function (req, res, next) {
-  let params = {}
+  let params = {}  
   let f = req.query.from;
   let t = req.query.to;
   let lim=99999;
@@ -19,7 +25,6 @@ router.route('/').get(function (req, res, next) {
   if (req.query.limit){
     lim = parseInt(req.query.limit); 
   }
-  let tmp;
   if (f && t){
     params.timestamp = {$gte: f, $lte:t}
   }
@@ -42,6 +47,41 @@ router.route('/').get(function (req, res, next) {
                 })
                 res.json({
                     data: out
+                });
+              })
+  // next();
+})
+
+router.route('/nOutlier').get(function (req, res, next) {
+  let params = {};
+  let t = new Date();
+  let f = new Date(t.getTime() - 15*60*60*1000) //16 karena 2x8 jam
+  params.timestamp = {$gte: toTimestamp(f), $lte:toTimestamp(t)}
+  let lim=99999;
+  if (req.query.limit){
+    lim = parseInt(req.query.limit); 
+  }
+  
+  tmp = db.find(params)
+              .limit(lim)
+              .sort({"timestamp": -1})
+              .exec((err, data) => {
+                if (err) {console.log(err)}
+                out = [];
+                data.forEach((d,i) => {
+                  row = {
+                    "_id": d._id,
+                    "__v": d.__v,
+                    "timestamp": d.timestamp,
+                    "ph": d.ph,
+                    "sal": anomali.convertSal(d.sal),
+                    "status": d.status
+                  };
+                  out.push(row);
+                })
+                res.json({
+                    data: out,
+                    n: out.length
                 });
               })
   // next();
